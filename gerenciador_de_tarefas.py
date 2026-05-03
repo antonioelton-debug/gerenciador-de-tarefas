@@ -71,11 +71,24 @@ def exibir_subtitulo(texto):
     print(linha)
     print()
 
+def input_obrigatorio(mensagem):
+    '''
+    Evita que o título das tarefas fiquem vazios ou com espaços adicionais
+    '''
+    while not (valor := input(mensagem).strip()):
+        print('Este campo é obrigatório!')
+    return valor
 
 def adicionar_nova_tarefa():
 
     exibir_subtitulo('Adicionar nova tarefa')
-    titulo_da_tarefa = input('Digite o título da tarefa: ').strip()
+    titulo_da_tarefa = input_obrigatorio('Digite o título da tarefa: ')
+    '''
+        Verificando se o título já existe
+    '''
+    while any(t['titulo'].lower() == (titulo := input_obrigatorio('Digite o título: ')).lower() for t in tarefas + tarefas_concluidas):
+        print(f'Erro: O título "{titulo}" já existe!')
+
     descricao = input('Digite a descrição da tarefa: ')
     dados_da_tarefa = {'titulo':titulo_da_tarefa, 'descrição':descricao, 'concluida':False}
     tarefas.append(dados_da_tarefa)
@@ -84,6 +97,7 @@ def adicionar_nova_tarefa():
 
 
 def visualizar_tarefas_ativas():
+
     exibir_subtitulo('Visualizar tarefas ativas')
     
     if not tarefas:
@@ -100,8 +114,9 @@ def visualizar_tarefas_ativas():
 
 
 def marcar_tarefa_como_concluida():
+
     exibir_subtitulo('Marcar tarefa como concluída')
-    titulo_tarefa = input('Digite o nome da tarefa que deseja marcar como concluída: ')
+    titulo_tarefa = input_obrigatorio('Digite o nome da tarefa que deseja marcar como concluída: ')
     tarefa_encontrada = False
 
     for tarefa in tarefas:
@@ -115,7 +130,7 @@ def marcar_tarefa_como_concluida():
     if not tarefa_encontrada:
         print('Tarefa não encontrada.')
 
-    # Movendo tarefas concluídas para a lista separada
+    """ Movendo tarefas concluídas para a lista separada """
     tarefas_para_mover = [tarefa for tarefa in tarefas if tarefa['concluida']]
     for tarefa in tarefas_para_mover:
         tarefas_concluidas.append(tarefa)
@@ -125,6 +140,7 @@ def marcar_tarefa_como_concluida():
 
 
 def listar_tarefas_concluidas():
+
     exibir_subtitulo('Listar tarefas concluídas')
     
     if not tarefas_concluidas:
@@ -142,6 +158,7 @@ def listar_tarefas_concluidas():
 
 
 def escolher_opcao():
+
     try:
         opcao_escolhida = int(input('Escolha uma opção: '))
 
