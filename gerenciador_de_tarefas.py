@@ -53,7 +53,7 @@ def opcao_invalida():
     - Tetorna ao menu principal
     '''
 
-    print('Opção inválida\n')
+    print('Opção inválida! Escolha uma opção entre 1 e 5.\n')
     voltar_ao_menu_principal()
 
 
@@ -75,7 +75,7 @@ def exibir_subtitulo(texto):
 def adicionar_nova_tarefa():
 
     exibir_subtitulo('Adicionar nova tarefa')
-    titulo_da_tarefa = input('Digite o título da tarefa: ')
+    titulo_da_tarefa = input('Digite o título da tarefa: ').strip()
     descricao = input('Digite a descrição da tarefa: ')
     dados_da_tarefa = {'titulo':titulo_da_tarefa, 'descrição':descricao, 'concluida':False}
     tarefas.append(dados_da_tarefa)
