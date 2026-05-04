@@ -29,6 +29,32 @@ python main.py
 - `main.py` - Código principal do gerenciador de tarefas.
 - `README.md` - Este arquivo de documentação.
 - `.gitignore` - Arquivo para ignorar arquivos não versionáveis, como dados pessoais e cache do Python.
+- `krid3r_tasks.example.json` - Arquivo de exemplo mostrando a estrutura de dados usada para armazenar as tarefas.
+
+## Estrutura de Dados
+
+As tarefas são armazenadas em um arquivo JSON com a seguinte estrutura:
+
+```json
+{
+  "ativas": [
+    {
+      "titulo": "Título da tarefa",
+      "descrição": "Descrição opcional da tarefa",
+      "concluida": false
+    }
+  ],
+  "concluidas": [
+    {
+      "titulo": "Tarefa concluída",
+      "descrição": "Descrição da tarefa",
+      "concluida": true
+    }
+  ]
+}
+```
+
+Consulte o arquivo `krid3r_tasks.example.json` para ver um exemplo vazio da estrutura.
 
 ## Observações
 
