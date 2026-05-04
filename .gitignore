@@ -40,3 +40,6 @@ dist/
 # Ignore task-specific files
 *.sqlite3
 *.db
+
+# Task data files
+krid3r_tasks.json

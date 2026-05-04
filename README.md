@@ -1,30 +1,37 @@
-# Gerenciador de Tarefas
+# Gerenciador de Tarefas - Krid3rTasks
 
-Este é um projeto simples em Python para gerenciar tarefas diárias.
+Este é um projeto simples em Python para gerenciar tarefas diárias. O programa permite adicionar, visualizar, marcar como concluídas e listar tarefas concluídas, com persistência de dados em um arquivo JSON.
+
+**Este é um projeto de estudos iniciais da linguagem Python, desenvolvido como parte da carreira "Desenvolvimento Back-End Python" da Alura.**
 
 ## Funcionalidades
 
-- Adicionar nova tarefa
-- Visualizar tarefas cadastradas
-- Marcar tarefas como concluídas
-- Remover tarefas concluídas da lista principal
+- **Adicionar nova tarefa**: Permite criar uma nova tarefa com título único e descrição opcional.
+- **Visualizar tarefas ativas**: Exibe uma lista das tarefas ainda não concluídas.
+- **Marcar tarefa como concluída**: Move uma tarefa da lista ativa para a lista de concluídas.
+- **Listar tarefas concluídas**: Mostra todas as tarefas que foram marcadas como concluídas.
+- **Persistência de dados**: As tarefas são salvas automaticamente em um arquivo JSON (`krid3r_tasks.json`) e carregadas ao iniciar o programa.
 
 ## Como usar
 
-1. Abra o terminal na pasta do projeto.
-2. Execute o arquivo principal com:
+1. Certifique-se de ter o Python instalado (versão 3.x recomendada).
+2. Abra o terminal na pasta do projeto.
+3. Execute o arquivo principal com:
 
 ```bash
-python gerenciador_de_tarefas.py
+python main.py
 ```
 
-3. Escolha uma opção no menu e siga as instruções.
+4. Navegue pelo menu interativo escolhendo as opções de 1 a 5.
 
 ## Estrutura do projeto
 
-- `gerenciador_de_tarefas.py` - código principal do gerenciador de tarefas.
+- `main.py` - Código principal do gerenciador de tarefas.
+- `README.md` - Este arquivo de documentação.
+- `.gitignore` - Arquivo para ignorar arquivos não versionáveis, como dados pessoais e cache do Python.
 
 ## Observações
 
-- As tarefas são armazenadas em memória enquanto o programa estiver em execução.
-- Quando o programa for fechado, as tarefas não são mantidas em disco.
+- Os dados das tarefas são armazenados em um arquivo JSON local (`krid3r_tasks.json`), garantindo persistência entre execuções.
+- O arquivo de dados não é versionado no Git para proteger informações pessoais.
+- Este projeto é focado em conceitos básicos de Python, como listas, dicionários, manipulação de arquivos JSON e controle de fluxo.

@@ -4,9 +4,42 @@
     Crie um programa com um menu interativo que permita ao usuário adicionar, visualizar e remover tarefas. Use uma lista para armazenar as tarefas.
 '''
 import os
+import json
 
+'''
+    Listas globais
+'''
 tarefas = []
 tarefas_concluidas = []
+ARQUIVO_JSON = 'krid3r_tasks.json'
+
+def salvar_dados():
+    '''Salva o estado atual das listas no arquivo JSON'''
+
+    dados = {
+        'ativas': tarefas,
+        'concluidas': tarefas_concluidas
+    }
+
+    with open(ARQUIVO_JSON, 'w', encoding='utf-8') as f: json.dump(dados, f, indent=4, ensure_ascii=False)
+
+
+def carregar_dados():
+    '''
+        Carrega os dados do arquivo JSON para as listas globais
+    '''
+
+    global tarefas, tarefas_concluidas
+
+    if os.path.exists(ARQUIVO_JSON):
+        with open(ARQUIVO_JSON, 'r', encoding='utf-8') as f:
+            try:
+                dados = json.load(f)
+                tarefas = dados.get('ativas', [])
+                tarefas_concluidas = dados.get('concluidas', [])
+            except json.JSONDcodeError:
+                tarefas, tarefas_concluidas = [], []
+            
 
 def exibir_nome_do_gerenciador():
 
@@ -82,16 +115,22 @@ def input_obrigatorio(mensagem):
 def adicionar_nova_tarefa():
 
     exibir_subtitulo('Adicionar nova tarefa')
-    titulo_da_tarefa = input_obrigatorio('Digite o título da tarefa: ')
     '''
         Verificando se o título já existe
     '''
-    while any(t['titulo'].lower() == (titulo := input_obrigatorio('Digite o título: ')).lower() for t in tarefas + tarefas_concluidas):
-        print(f'Erro: O título "{titulo}" já existe!')
+    while True:
+        titulo_da_tarefa = input_obrigatorio('Digite o título: ')
+        # Validando o que ACABOU de ser digitado
+        if any(t['titulo'].lower() == titulo_da_tarefa.lower() for t in tarefas + tarefas_concluidas):
+            print(f'Erro: O título "{titulo_da_tarefa}" já existe!')
+        else:
+            # Se não existe, saímos do loop com a variável 'titulo_da_tarefa' pronta para usar
+            break
 
     descricao = input('Digite a descrição da tarefa: ')
     dados_da_tarefa = {'titulo':titulo_da_tarefa, 'descrição':descricao, 'concluida':False}
     tarefas.append(dados_da_tarefa)
+    salvar_dados() # Salva no JSON após adicionar
     print(f'Tarefa {titulo_da_tarefa} adicionada com sucesso!')
     voltar_ao_menu_principal()
 
@@ -117,24 +156,21 @@ def marcar_tarefa_como_concluida():
 
     exibir_subtitulo('Marcar tarefa como concluída')
     titulo_tarefa = input_obrigatorio('Digite o nome da tarefa que deseja marcar como concluída: ')
-    tarefa_encontrada = False
+    tarefa_encontrada = None
 
     for tarefa in tarefas:
-        if titulo_tarefa == tarefa['titulo']:
-            tarefa_encontrada = True
-            tarefa['concluida'] = not tarefa['concluida']
-            mensagem = f'A tarefa {titulo_tarefa} foi concluída com sucesso!' if tarefa['concluida'] else f'A tarefa {titulo_tarefa} foi concluída com sucesso!'
-            print(mensagem)
+        if titulo_tarefa.lower() == tarefa['titulo'].lower():
+            tarefa_encontrada = tarefa
             break
     
-    if not tarefa_encontrada:
+    if tarefa_encontrada:
+        tarefa_encontrada['concluida'] = True
+        tarefas_concluidas.append(tarefa_encontrada)
+        tarefas.remove(tarefa_encontrada)
+        salvar_dados() # Salva no JSON após mover
+        print(f'A tarefa "{tarefa_encontrada["titulo"]}" foi concluída com sucesso!')
+    else:
         print('Tarefa não encontrada.')
-
-    """ Movendo tarefas concluídas para a lista separada """
-    tarefas_para_mover = [tarefa for tarefa in tarefas if tarefa['concluida']]
-    for tarefa in tarefas_para_mover:
-        tarefas_concluidas.append(tarefa)
-        tarefas.remove(tarefa)
 
     voltar_ao_menu_principal()
 
@@ -181,13 +217,17 @@ def escolher_opcao():
             case _:
                 opcao_invalida()
 
-    except:
+    except ValueError:
         opcao_invalida()
 
 
 def main():
 
     '''Função principal que inicia o programa'''
+
+    #inicializa os dados na primeira execução
+    if not tarefas and not tarefas_concluidas:
+        carregar_dados()
 
     os.system('cls')
     exibir_nome_do_gerenciador()
